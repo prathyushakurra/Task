@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        input[type=text],
+        select {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            background: #eee !important;
+        }
+
+        input[type=submit] {
+            background-color: rgba(80, 86, 79, 1);
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        input[type=submit]:hover {
+            background-color: #080a08;
+        }
+
+        .padding_30 {
+            padding: 30px;
+        }
+
+        .padding_20_left {
+            padding-left: 20px;
+        }
+
+        .form {
+            float: left;
+            width: 50%;
+            background: #fff;
+            border-left: 10px solid #f1f1f1;
+            border-right: 4px solid #f1f1f1;
+            min-height: 450px;
+        }
+
+        .tasks {
+            float: left;
+            width: 50%;
+            background: #fff;
+            border-right: 10px solid #f1f1f1;
+            border-left: 4px solid #f1f1f1;
+            padding: 30px;
+            min-height: 450px
+        }
+
+        .right {
+            background-color: #e5e5e5;
+            float: left;
+            width: 20%;
+            padding: 15px;
+            margin-top: 7px;
+            text-align: center;
+        }
+
+        .color1 {
+            color: #323237;
+        }
+
+        .color2 {
+            color: #77777b;
+        }
+
+        @media only screen and (max-width:620px) {
+            /* For mobile phones: */
+            .tasks,
+            .form {
+                width: 100%;
+                border-left: 10px solid #f1f1f1;
+                border-right: 10px solid #f1f1f1;
+            }
+        }
+
+        .body_custom {
+            margin: 0px 0px;
+            background-color: #f1f1f1;
+            font-family: sans-serif;
+        }
+
+        .header {
+            background-color: #f1f1f1;
+            padding: 10px 30px;
+            border-top: 10px solid #e5e5e5;
+            border-right: 10px solid #e5e5e5;
+            border-left: 10px solid #e5e5e5;
+        }
+
+        .width_100_P {
+            width: 100%;
+        }
+
+        .task_list {
+            border: 4px solid #e5e5e5;
+            border-radius: 3px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .tasktable {
+            width: 100%;
+
+        }
+
+        .tasktable tr {
+            height: 40px;
+        }
+
+        .tasktable tr:nth-child(even) {
+            background: #f1f1f1
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+    </style>
+</head>
+
+<body class="body_custom">
+
+    <div class="header">
+        <h1>Task Tracker</h1>
+        <h3 style="margin-top: -25px;" class="color2">v2.0</h3>
+    </div>
+
+    <div class="width_100_P">
+        <div class="form padding_30 color1">
+            <h2 class="color1">Create a task</h2>
+            <form name="taskform" id="taskform">
+                <label for="name">
+                    <b>Task Name</b>
+                </label>
+                <input type="text" id="name" name="name">
+
+                <label for="date">
+                    <b>Date</b>
+                </label>
+                <input type="text" id="date" name="date">
+
+                <label for="assigned">
+                    <b>Assigned to</b>
+                </label>
+                <input type="text" id="assigned" name="assigned">
+
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+
+        <div class="tasks padding_30">
+            <h2 class="color1">Existing Tasks</h2>
+            <div class="task_list">
+                <table class="tasktable" id="taskid">
+
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <div style="height: 100px;">
+
+    </div>
+    <script src="jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var tasks = [{
+                    "name": "Test Task #1",
+                    "date": "12/01/2012",
+                    "assigned": "John Doe"
+                },
+                {
+                    "name": "Test Task #2",
+                    "date": "12/02/2012",
+                    "assigned": "John Doe"
+                },
+                {
+                    "name": "Test Task #3",
+                    "date": "12/03/2012",
+                    "assigned": "John Doe"
+                },
+                {
+                    "name": "Test Task #4",
+                    "date": "12/04/2012",
+                    "assigned": "John Doe"
+                },
+                {
+                    "name": "Test Task #5",
+                    "date": "12/05/2012",
+                    "assigned": "John Doe"
+                },
+                {
+                    "name": "Test Task #6",
+                    "date": "12/06/2012",
+                    "assigned": "John Doe"
+                },
+                {
+                    "name": "Test Task #7",
+                    "date": "12/07/2012",
+                    "assigned": "John Doe"
+                }
+            ];
+            $.each(tasks, function (key, value) {
+                updatetable(value);
+            });
+            $("#taskform").submit(function (event) {
+                var taskobj = {
+                    "name": null,
+                    "date": null,
+                    "assigned": null
+                };
+                taskobj["name"] = $("#name").val();
+                taskobj["date"] = $("#date").val();
+                taskobj["assigned"] = $("#assigned").val();
+                tasks.push(taskobj);
+                updatetable(taskobj);
+                event.preventDefault();
+            });
+
+            function updatetable(task) {
+                $("#taskid").append('<tr><td><b class="color1 padding_20_left">' + task.name +
+                    '</b><span class="color2"> ' + task.date +
+                    '</span></td><td><b class="color1">' + task.assigned + '</b></td></tr>');
+            }
+
+        });
+    </script>
+
+</body>
+
+</html>
